@@ -1,36 +1,29 @@
 import random
 
-random.seed(None)
-max_len = 20
-size = [max_len, max_len]
-maze_whole = []
 
-#fill with walls
-for i in range(size[0]):
-    temp = []
-    for j in range(size[1]):
-        temp.append(0)
-    maze_whole.append(temp)
-
+# Returns the number of free paths from any square
 def degree_of_freedom(pos):
-    return maze_whole[pos[0]+1][pos[1]]+maze_whole[pos[0]-1][pos[1]]+maze_whole[pos[0]][pos[1]+1]+maze_whole[pos[0]][pos[1]-1]
+    return maze_whole[pos[0] + 1][pos[1]] + maze_whole[pos[0] - 1][pos[1]] + maze_whole[pos[0]][pos[1] + 1] + \
+           maze_whole[pos[0]][pos[1] - 1]
 
-def DFS(pos):
+
+def dfs(pos):
     set_of_moves = []
     maze_whole[pos[0]][pos[1]] = 1
-    if pos[0] < max_len - 2 and maze_whole[pos[0]+1][pos[1]] == 0:
-        set_of_moves.append([pos[0]+1, pos[1]])
-    if pos[0] > 1 and maze_whole[pos[0]-1][pos[1]] == 0:
-        set_of_moves.append([pos[0]-1, pos[1]])
-    if pos[1] < max_len - 2 and maze_whole[pos[0]][pos[1]+1] == 0:
-        set_of_moves.append([pos[0], pos[1]+1])
-    if pos[1] > 1 and maze_whole[pos[0]][pos[1]-1] == 0:
-        set_of_moves.append([pos[0], pos[1]-1])
+    if pos[0] < max_len - 2 and maze_whole[pos[0] + 1][pos[1]] == 0:
+        set_of_moves.append([pos[0] + 1, pos[1]])
+    if pos[0] > 1 and maze_whole[pos[0] - 1][pos[1]] == 0:
+        set_of_moves.append([pos[0] - 1, pos[1]])
+    if pos[1] < max_len - 2 and maze_whole[pos[0]][pos[1] + 1] == 0:
+        set_of_moves.append([pos[0], pos[1] + 1])
+    if pos[1] > 1 and maze_whole[pos[0]][pos[1] - 1] == 0:
+        set_of_moves.append([pos[0], pos[1] - 1])
     while len(set_of_moves) != 0:
-        x = random.randint(0, len(set_of_moves)-1)
+        x = random.randint(0, len(set_of_moves) - 1)
         if degree_of_freedom(set_of_moves[x]) == 1:
-            DFS(set_of_moves[x])
+            dfs(set_of_moves[x])
         del set_of_moves[x]
+
 
 def print_maze(maze):
     for pos_i, i in enumerate(maze):
@@ -48,5 +41,16 @@ def print_maze(maze):
         print ""
     print ""
 
-DFS([1,1])
-print_maze(maze_whole)
+if __name__ == '__main__':
+    random.seed(None)
+    max_len = 20
+    size = [max_len, max_len]
+    maze_whole = []
+    # Initialize the maze to walls
+    for i in range(size[0]):
+        temp = []
+        for j in range(size[1]):
+            temp.append(0)
+        maze_whole.append(temp)
+    dfs([1, 1])
+    print_maze(maze_whole)
